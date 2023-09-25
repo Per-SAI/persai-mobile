@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { NativeBaseProvider } from 'native-base'
 import theme from '../theme'
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context'
 
 type Props = {
   children: React.ReactNode
@@ -8,9 +9,11 @@ type Props = {
 
 const AppContainer = (props: Props) => {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider theme={theme}>{props.children}</NativeBaseProvider>
-    </NavigationContainer>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <NavigationContainer>
+        <NativeBaseProvider>{props.children}</NativeBaseProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   )
 }
 

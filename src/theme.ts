@@ -2,12 +2,13 @@ import { extendTheme } from 'native-base'
 
 const config = {
   useSystemColorMode: false,
-  initialColorMode: 'light'
+  initialColorMode: 'light',
+
 }
 
 const colors = {
   primary: {
-    50: ' #EEF2F6',
+    50: '#EEF2F6',
     100: 'CFD9E7',
     200: '#B1C1D8',
     300: '#92A9C9',
