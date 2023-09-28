@@ -6,8 +6,8 @@ import LearnOptions from '../components/learn-options'
 
 const FlashcardScreen = () => {
   return (
-    <ScrollView bg='#F4F6F8'>
-      <VStack alignItems="center" space={10} mt={10}>
+    <ScrollView bg="#F4F6F8">
+      <VStack alignItems="center" space={6} mt={6}>
         <ProgressNav />
         <FlashcardQuestion />
         <ProgressBar />
