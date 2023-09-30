@@ -1,5 +1,6 @@
 import { Center, Text, Icon } from 'native-base'
 import { Entypo } from '@expo/vector-icons'
+import Question from './question'
 
 const FlashcardQuestion = () => {
   return (
@@ -19,7 +20,7 @@ const FlashcardQuestion = () => {
         right={4}
       />
 
-      <Text color='light.800'>This is a question!</Text>
+      <Question question="Goodbye to a world" />
     </Center>
   )
 }

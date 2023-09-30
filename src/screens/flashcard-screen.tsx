@@ -1,5 +1,5 @@
 import ProgressNav from '../components/progress-nav'
-import FlashcardQuestion from '../components/flashcard-question'
+import FlashcardQuestion from '../components/flashcard-question-box'
 import { VStack, ScrollView } from 'native-base'
 import ProgressBar from '../components/progress-bar'
 import LearnOptions from '../components/learn-options'

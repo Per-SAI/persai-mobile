@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import MainScreen from './screens/main-screen'
 import FlashcardScreen from './screens/flashcard-screen'
+import LearnScreen from './screens/learn-screen'
 
 const options = {
   headerShown: false
@@ -16,6 +17,7 @@ const App = () => {
     >
       <Drawer.Screen name="Main" component={MainScreen} />
       <Drawer.Screen name="Flashcard" component={FlashcardScreen} />
+      <Drawer.Screen name="Learn" component={LearnScreen} />
     </Drawer.Navigator>
   )
 }
