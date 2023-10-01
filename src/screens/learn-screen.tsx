@@ -8,7 +8,7 @@ import LearnOptions from '../components/learn-options'
 const LearnScreen = () => {
   return (
     <ScrollView bg="#F4F6F8">
-      <VStack alignItems="center" space="6" mt={6}>
+      <VStack alignItems="center" space="6" mt="3">
         <ProgressNav />
         <Question question="Goodbye to a world" image="https://static.wikia.nocookie.net/mushokutensei/images/e/eb/Eris_LN.png/revision/latest?cb=20200709112846" />
         <MultipleChoice />

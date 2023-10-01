@@ -10,7 +10,7 @@ const Question = (props: Props) => {
   const {question, image, alt} = props
   return (
     <Center width="90%">
-      <Text color="light.800" fontSize="14">
+      <Text color="#212B36" fontSize="16" fontWeight='semibold'>
         {question}
       </Text>
       {image && (

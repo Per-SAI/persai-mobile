@@ -2,19 +2,21 @@ import { VStack, Circle, Flex } from 'native-base'
 
 type Props = {
   answer: string
-  no?: string
+  no?: string,
+  background?: string
 }
 
 const Options = (props: Props) => {
-  const { answer, no } = props
+  const { answer, no, background } = props
   return (
     <Flex
       rounded="xl"
-      background="white"
+      background={background ? background : 'white'}
       py={3}
       _text={{ color: '#04297A', fontSize: '14', lineHeight: '22' }}
       flexDirection="row"
       align="center"
+      minW="45%"
     >
       <Circle size="40px" bg="#DFE3E8" mx={4} _text={{ color: '#212B36' }}>
         {no}
