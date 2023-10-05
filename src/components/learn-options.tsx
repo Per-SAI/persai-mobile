@@ -4,7 +4,7 @@ import StartIcon from './icons/start-icon'
 
 const LearnOptions = () => {
   return (
-    <HStack space={16}>
+    <HStack space={16} flex={1} justifyContent='center'>
       <Circle size={12} bg="#1890FF" shadow={2}>
         <ShuffleIcon />
       </Circle>

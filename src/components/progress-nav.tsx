@@ -8,7 +8,7 @@ const ProgressNav = () => {
       <Flex direction="row" justify="space-evenly" w="full" align="center">
         <Center>
           <HStack alignItems="center" space="4">
-            <Text fontSize="xl">Time left</Text>
+            {/* <Text fontSize="xl">Time left</Text> */}
             <Text color="#5BE584" bold fontSize="xl">
               30:10
             </Text>
