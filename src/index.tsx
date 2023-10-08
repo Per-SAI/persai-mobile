@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator()
 const App = () => {
   return (
     <Drawer.Navigator
-      initialRouteName="Main"
+      initialRouteName="Login"
       screenOptions={options}
     >
       <Drawer.Screen name="Main" component={MainScreen} />
