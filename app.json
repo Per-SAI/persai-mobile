@@ -16,14 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.persai.persai"
+      "bundleIdentifier": "com.exe.persai"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.persai.persai"
+      "package": "com.exe.persai"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,6 +33,7 @@
         "projectId": "61021409-87e7-4c71-ba1f-d081ad76b03f"
       }
     },
-    "scheme": "persai"
+    "scheme": "persai",
+    "plugins": ["@react-native-google-signin/google-signin"]
   }
 }

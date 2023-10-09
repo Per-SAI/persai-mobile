@@ -5,36 +5,62 @@ import { SvgXml } from 'react-native-svg'
 import * as WebBrowser from 'expo-web-browser' // only work for android and ios
 import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes
+} from '@react-native-google-signin/google-signin'
+
+GoogleSignin.configure({
+  // webClientId:
+  //   '1013496604414-0tickjn70evnkd5ofhf9gli91bis3g91.apps.googleusercontent.com',
+  webClientId:
+    '662805201143-rp4smdnac3id3g1b8cbofsb1ficimtr5.apps.googleusercontent.com',
+  iosClientId:
+    '662805201143-0kld4dfkcrtndnjo3sk2pjoepri0jjlu.apps.googleusercontent.com'
+})
 
 WebBrowser.maybeCompleteAuthSession()
 
 const LoginScreen = () => {
   const [userInfo, setUserInfo] = useState(null)
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:
-      '1013496604414-s1ulvp8e95ijrug90qfmiedj3ir110ku.apps.googleusercontent.com',
-    iosClientId:
-      '662805201143-0kld4dfkcrtndnjo3sk2pjoepri0jjlu.apps.googleusercontent.com'
-  })
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   androidClientId:
+  //     '1013496604414-s1ulvp8e95ijrug90qfmiedj3ir110ku.apps.googleusercontent.com'
+  // })
 
-  const handleSignInWithGoogle = async () => {
-    const user = await AsyncStorage.getItem('@user')
-    if (!user) {
-      if (response?.type === 'success' && response?.authentication) {
-        console.log(response)
-        await getUserInfo(response.authentication.accessToken)
-      }
-    } else {
-      setUserInfo(JSON.parse(user))
+  // const handleSignInWithGoogle = async () => {
+  //   const user = await AsyncStorage.getItem('@user')
+  //   if (!user) {
+  //     if (response?.type === 'success' && response?.authentication) {
+  //       console.log(response)
+  //       await getUserInfo(response.authentication.accessToken)
+  //     }
+  //   } else {
+  //     setUserInfo(JSON.parse(user))
+  //   }
+  // }
+
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      const token = await GoogleSignin.getTokens()
+
+      setUserInfo(await JSON.parse(JSON.stringify(userInfo.user.name)))
+      console.log(userInfo)
+      console.log(token)
+    } catch (error) {
+      console.log(error)
     }
   }
 
-  useEffect(() => {
-    const handleSignIn = async () => {
-      await handleSignInWithGoogle()
-    }
-    handleSignIn()
-  }, [response])
+  // useEffect(() => {
+  //   const handleSignIn = async () => {
+  //     await handleSignInWithGoogle()
+  //   }
+  //   handleSignIn()
+  // }, [response])
 
   const getUserInfo = async (token: string) => {
     if (!token) return
@@ -54,7 +80,7 @@ const LoginScreen = () => {
   }
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('@user')
+    await GoogleSignin.signOut();
     setUserInfo(null)
   }
 
@@ -96,7 +122,7 @@ const LoginScreen = () => {
           }}
         >
           <SvgXml xml={xml} style={{ height: 20, width: 40 }} />
-          <Text style={{ color: '#454F5B' }} onPress={() => promptAsync()}>
+          <Text style={{ color: '#454F5B' }} onPress={signIn}>
             Login with Gmail account
             {JSON.stringify(userInfo)}
           </Text>

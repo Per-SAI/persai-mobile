@@ -1,4 +1,4 @@
-package com.persai.persai;
+package com.exe.persai;
 
 import android.app.Application;
 import android.content.res.Configuration;
