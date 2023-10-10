@@ -2,38 +2,21 @@ import { View, Text } from 'react-native'
 import React, { useState } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import { SvgXml } from 'react-native-svg'
-import * as WebBrowser from 'expo-web-browser' // only work for android and ios
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   GoogleSignin,
 } from '@react-native-google-signin/google-signin'
 import { WEB_CLIENT_ID, IOS_CLIENT_ID } from '../constants/env'
+import { LoginScreenNavigationProp } from '..'
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
   iosClientId: IOS_CLIENT_ID
 })
 
-WebBrowser.maybeCompleteAuthSession()
-
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation}: LoginScreenNavigationProp) => {
   const [userInfo, setUserInfo] = useState(null)
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   androidClientId:
-  //     '1013496604414-s1ulvp8e95ijrug90qfmiedj3ir110ku.apps.googleusercontent.com'
-  // })
-
-  // const handleSignInWithGoogle = async () => {
-  //   const user = await AsyncStorage.getItem('@user')
-  //   if (!user) {
-  //     if (response?.type === 'success' && response?.authentication) {
-  //       console.log(response)
-  //       await getUserInfo(response.authentication.accessToken)
-  //     }
-  //   } else {
-  //     setUserInfo(JSON.parse(user))
-  //   }
-  // }
+  const [isLogged, setIsLogged] = useState(false)
 
   const signIn = async () => {
     try {
@@ -44,32 +27,11 @@ const LoginScreen = ({navigation}) => {
       setUserInfo(await JSON.parse(JSON.stringify(userInfo.user.name)))
       console.log(userInfo)
       await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
+      
       navigation.navigate('Main')
       console.log(token)
     } catch (error) {
       console.log(error)
-    }
-  }
-
-  // useEffect(() => {
-  //   const handleSignIn = async () => {
-  //     await handleSignInWithGoogle()
-  //   }
-  //   handleSignIn()
-  // }, [response])
-
-  const getUserInfo = async (token: string) => {
-    if (!token) return
-    try {
-      const res = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      const user = await res.json()
-    } catch (e) {
-      console.error('Error at getUserInfo', e)
     }
   }
 

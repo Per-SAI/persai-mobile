@@ -34,6 +34,7 @@
       }
     },
     "scheme": "persai",
-    "plugins": ["@react-native-google-signin/google-signin"]
+    "plugins": ["@react-native-google-signin/google-signin"],
+    "owner": "persai"
   }
 }

@@ -1,30 +1,40 @@
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import MainScreen from './screens/main-screen'
-import FlashcardScreen from './screens/flashcard-screen'
-import LearnScreen from './screens/learn-screen'
-import MultipleTestScreen from './screens/multiple-test-screen'
+import UserInfoScreen from './screens/userinfo-screen'
 import MyCollectionScreen from './screens/my-collection-screen'
 import LoginScreen from './screens/login-screen'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 const options = {
   headerShown: false
 }
 
-const Drawer = createDrawerNavigator()
+type RootStackParamList = {
+  Login: undefined
+  Main: undefined
+  MyCollection: undefined
+  MyInfo: undefined
+}
 
+const Tab = createBottomTabNavigator<RootStackParamList>()
+
+// https://reactnavigation.org/docs/auth-flow/
 const App = () => {
   return (
-    <Drawer.Navigator
-      initialRouteName="Login"
-      screenOptions={options}
-    >
-      <Drawer.Screen name="Main" component={MainScreen} />
-      <Drawer.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Flashcard" component={FlashcardScreen} />
-      <Drawer.Screen name="Learn" component={LearnScreen} />
-      <Drawer.Screen name="MultipleTest" component={MultipleTestScreen} />
-      <Drawer.Screen name="MyCollection" component={MyCollectionScreen} />
-    </Drawer.Navigator>
+    <Tab.Navigator initialRouteName="Login" screenOptions={options}>
+      <Tab.Screen name="Main" component={MainScreen} />
+      <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
+      <Tab.Screen name="MyInfo" component={UserInfoScreen} />
+      <Tab.Screen name="Login" options={{tabBarStyle: {display: 'none'}}} component={LoginScreen} />
+    </Tab.Navigator>
   )
 }
 
 export default App
+export type MainScreenNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'Main'
+>
+export type LoginScreenNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'Login'
+>

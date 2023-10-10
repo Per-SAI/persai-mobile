@@ -1,8 +1,11 @@
-import { Box, Center, Container, Flex, Text, ScrollView } from 'native-base'
+import { Box, Center, Container, Flex, Text, ScrollView, Button } from 'native-base'
 
 const MyCollectionScreen = () => (
   <ScrollView>
     <Center safeArea>
+      <Container w="100%" mt={3}>
+        <Button>Create New</Button>
+      </Container>
       <Container w="100%" mt={3}>
         <Flex
           justifyContent="center"
