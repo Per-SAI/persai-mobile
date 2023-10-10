@@ -1,28 +1,22 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as WebBrowser from 'expo-web-browser' // only work for android and ios
-import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   GoogleSignin,
-  GoogleSigninButton,
-  statusCodes
 } from '@react-native-google-signin/google-signin'
+import { WEB_CLIENT_ID, IOS_CLIENT_ID } from '../constants/env'
 
 GoogleSignin.configure({
-  // webClientId:
-  //   '1013496604414-0tickjn70evnkd5ofhf9gli91bis3g91.apps.googleusercontent.com',
-  webClientId:
-    '662805201143-rp4smdnac3id3g1b8cbofsb1ficimtr5.apps.googleusercontent.com',
-  iosClientId:
-    '662805201143-0kld4dfkcrtndnjo3sk2pjoepri0jjlu.apps.googleusercontent.com'
+  webClientId: WEB_CLIENT_ID,
+  iosClientId: IOS_CLIENT_ID
 })
 
 WebBrowser.maybeCompleteAuthSession()
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [userInfo, setUserInfo] = useState(null)
   // const [request, response, promptAsync] = Google.useAuthRequest({
   //   androidClientId:
@@ -49,6 +43,8 @@ const LoginScreen = () => {
 
       setUserInfo(await JSON.parse(JSON.stringify(userInfo.user.name)))
       console.log(userInfo)
+      await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
+      navigation.navigate('Main')
       console.log(token)
     } catch (error) {
       console.log(error)
@@ -72,8 +68,6 @@ const LoginScreen = () => {
       })
 
       const user = await res.json()
-      await AsyncStorage.setItem('@user', JSON.stringify(user))
-      setUserInfo(user)
     } catch (e) {
       console.error('Error at getUserInfo', e)
     }
