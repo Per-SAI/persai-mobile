@@ -3,7 +3,6 @@ import Card from '../components/flashcard-question-box'
 import { VStack, Center, ScrollView, Box } from 'native-base'
 import ProgressBar from '../components/progress-bar'
 import LearnOptions from '../components/learn-options'
-import { View } from 'react-native'
 
 const FlashcardScreen = () => {
   return (

@@ -1,5 +1,5 @@
 import MainScreen from './screens/main-screen'
-import UserInfoScreen from './screens/userinfo-screen'
+import ProfileScreen from './screens/profile-screen'
 import MyCollectionScreen from './screens/my-collection-screen'
 import LoginScreen from './screens/login-screen'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -40,11 +40,11 @@ const Layout = () => {
           <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
           <Tab.Screen
             name="MyInfo"
-            component={UserInfoScreen}
+            component={ProfileScreen}
             options={{
               headerRight: () => <Button onPress={onLogout} variant='link'>Sign Out</Button>,
               headerShown: true,
-              title: 'My Information'
+              title: 'Profile'
             }}
           />
         </>

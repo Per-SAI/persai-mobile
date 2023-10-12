@@ -1,7 +1,7 @@
 import { Text, SafeAreaView } from 'react-native'
 import React from 'react'
 
-const UserInfoScreen = () => {
+const ProfileScreen = () => {
   return (
     <SafeAreaView>
       <Text>UserInfo</Text>
@@ -9,4 +9,4 @@ const UserInfoScreen = () => {
   )
 }
 
-export default UserInfoScreen
+export default ProfileScreen
