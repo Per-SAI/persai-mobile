@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { Button } from 'native-base'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import FlashcardScreen from './screens/flashcard-screen'
 const options = {
   headerShown: false
 }
@@ -15,6 +16,7 @@ type RootStackParamList = {
   Main: undefined
   MyCollection: undefined
   MyInfo: undefined
+  Flashcard: undefined
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -36,17 +38,22 @@ const Layout = () => {
     <Tab.Navigator screenOptions={options}>
       {authState?.authenticated ? (
         <>
-          <Tab.Screen name="Main" component={MainScreen}  />
+          <Tab.Screen name="Main" component={MainScreen} />
           <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
           <Tab.Screen
             name="MyInfo"
             component={ProfileScreen}
             options={{
-              headerRight: () => <Button onPress={onLogout} variant='link'>Sign Out</Button>,
+              headerRight: () => (
+                <Button onPress={onLogout} variant="link">
+                  Sign Out
+                </Button>
+              ),
               headerShown: true,
               title: 'Profile'
             }}
           />
+          <Tab.Screen name="Flashcard" component={FlashcardScreen} />
         </>
       ) : (
         <Tab.Screen

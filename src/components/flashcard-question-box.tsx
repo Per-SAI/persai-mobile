@@ -4,6 +4,8 @@ import { mixColor, mix } from 'react-native-redash'
 import Question from './question'
 import Animated from 'react-native-reanimated'
 import { Dimensions, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { TouchableOpacity } from 'react-native'
 
 const { width: wWidth } = Dimensions.get('window')
 const width = wWidth * 0.7
@@ -12,13 +14,34 @@ const borderRadius = 24
 
 type Props = {
   position: number
+  questions: Array<unknown>
+  current: number
 }
 
 const Card = (props: Props) => {
-  const { position } = props
+  const { position, questions, current } = props
+  const [shown, setShown] = useState()
+  const [flipped, setFlipped] = useState(false)
   const backgroundColor = mixColor(position, '#C9E9E7', '#74BCB8')
-  const translateY = mix(position, 0, -50)
+  const translateY = mix(position, 0, -30)
   const scale = mix(position, 1, 0.9)
+
+  const handleFlip = () => {
+    if (!flipped) {
+      setShown(questions[current].correctAnswer)
+      setFlipped(prev => !prev)
+      
+    } else {
+      setShown(questions[current].question)
+      setFlipped(prev => !prev)
+    }
+  }
+
+  useEffect(() => {
+    setShown(questions[current].question)
+    setFlipped(false)
+  }, [current])
+
   return (
     // <Center
     //   height="80%"
@@ -49,12 +72,11 @@ const Card = (props: Props) => {
         position: 'absolute'
       }}
     >
-      <Center
-        height="full"
-        width="full"
-      >
-        <Question question="Goodbye to a world" />
-      </Center>
+      <TouchableOpacity onPress={handleFlip}>
+        <Center height="full" width="full">
+          <Question question={shown} />
+        </Center>
+      </TouchableOpacity>
     </Animated.View>
   )
 }
