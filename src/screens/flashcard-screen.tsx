@@ -53,57 +53,55 @@ const response = {
 }
 
 const FlashcardScreen = () => {
-  const {questionResponses} = response
+  const { questionResponses } = response
   const [current, setCurrent] = useState(0)
 
   const onPrevious = () => {
     if (current === 0) {
       setCurrent(0)
     } else {
-      setCurrent(prev => prev - 1)
+      setCurrent((prev) => prev - 1)
     }
   }
-  
+
   const onNext = () => {
     const max = questionResponses.length
     if (current === max - 1) {
       setCurrent(max - 1)
     } else {
-      setCurrent(prev => prev + 1)
+      setCurrent((prev) => prev + 1)
     }
   }
 
   return (
-    <ScrollView bg="#F4F6F8">
-      <VStack alignItems="center" space={3}>
-        <ProgressNav />
-        <HStack top="50%" mx={3}>
-          <Button onPress={onPrevious}>{'<'}</Button>
-          <Center flex={1} justifyContent="center" alignItems="center">
-            {/* {questionResponses.map((question) => {
+    <VStack alignItems="center" space={3} h="full">
+      <ProgressNav />
+      <HStack top="50%" mx={3}>
+        <Button onPress={onPrevious}>{'<'}</Button>
+        <Center flex={1} justifyContent="center" alignItems="center">
+          {/* {questionResponses.map((question) => {
               return <Card key={question.id} position={0} />
             })} */}
-            <Card position={0} questions={questionResponses} current={current} />
-            {/* <Card position={1} />
+          <Card position={0} questions={questionResponses} current={current} />
+          {/* <Card position={1} />
             <Card position={0.5} />
             <Card position={0} /> */}
-          </Center>
-          <Button onPress={onNext}>{'>'}</Button>
-        </HStack>
+        </Center>
+        <Button onPress={onNext}>{'>'}</Button>
+      </HStack>
 
-        <VStack
-          flex={1}
-          justifyContent="center"
-          justifyItems="center"
-          w="full"
-          bottom="-150%"
-          space={4}
-        >
-          <ProgressBar />
-          <LearnOptions />
-        </VStack>
+      <VStack
+        flex={1}
+        justifyContent="center"
+        justifyItems="center"
+        w="full"
+        bottom="-50%"
+        space={4}
+      >
+        <ProgressBar />
+        <LearnOptions />
       </VStack>
-    </ScrollView>
+    </VStack>
   )
 }
 
