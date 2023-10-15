@@ -16,13 +16,11 @@ const getBaseUrl = () => {
 }
 
 const axiosInstance = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: 'http://persai-env-v1.ap-southeast-1.elasticbeanstalk.com/',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
   }
 })
-
-axiosInstance.interceptors.request.use(onRequest, onRequestError)
 
 export default axiosInstance

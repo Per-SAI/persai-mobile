@@ -1,12 +1,9 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { WEB_CLIENT_ID, IOS_CLIENT_ID } from '../constants/env'
 import { GoogleSignin, User } from '@react-native-google-signin/google-signin'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { LOGIN_URL } from '../constants/urls'
+import axios from '../constants/axios'
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -50,16 +47,37 @@ export const AuthProvider = ({ children }: Props) => {
     bootstrapAsync()
   })
 
+  const getAccessToken = async (idToken: string) => {
+    const res = await fetch(LOGIN_URL, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        idToken
+      })
+    })
+
+    const resJson = await res.json()
+    return resJson
+  }
+
   const login = async () => {
     try {
       await GoogleSignin.hasPlayServices()
       const userInfo = await GoogleSignin.signIn()
-      await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
-      setAuthState({
-        token: userInfo.idToken,
-        authenticated: true
-      })
-      return userInfo
+      const { idToken } = userInfo
+      if (idToken) {
+        const data = await getAccessToken(idToken)
+        await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
+        const accessToken = data.accessToken
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+        setAuthState({
+          token: userInfo.idToken,
+          authenticated: true
+        })
+      }
     } catch (e) {
       return { error: true, msg: e }
     }
