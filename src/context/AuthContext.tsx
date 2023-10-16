@@ -37,15 +37,22 @@ export const AuthProvider = ({ children }: Props) => {
       const userInfo = await AsyncStorage.getItem('@user')
       if (userInfo) {
         const userObject = JSON.parse(userInfo) as User
-        setAuthState({
-          token: userObject.idToken,
-          authenticated: true
-        })
+        if (userObject.idToken) {
+          const data = await getAccessToken(userObject.idToken)
+          const accessToken = data.accessToken
+          axios.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accessToken}`
+          setAuthState({
+            token: userObject.idToken,
+            authenticated: true
+          })
+        }
       }
     }
 
     bootstrapAsync()
-  })
+  }, [])
 
   const getAccessToken = async (idToken: string) => {
     const res = await fetch(LOGIN_URL, {
@@ -72,6 +79,7 @@ export const AuthProvider = ({ children }: Props) => {
         const data = await getAccessToken(idToken)
         await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
         const accessToken = data.accessToken
+        console.log(accessToken)
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
         setAuthState({
           token: userInfo.idToken,
