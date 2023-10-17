@@ -29,11 +29,10 @@ const Card = (props: Props) => {
   const handleFlip = () => {
     if (!flipped) {
       setShown(questions[current].correctAnswer)
-      setFlipped(prev => !prev)
-      
+      setFlipped((prev) => !prev)
     } else {
       setShown(questions[current].question)
-      setFlipped(prev => !prev)
+      setFlipped((prev) => !prev)
     }
   }
 

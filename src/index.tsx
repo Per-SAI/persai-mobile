@@ -16,7 +16,7 @@ type RootStackParamList = {
   Main: undefined
   MyCollection: undefined
   MyInfo: undefined
-  Flashcard: undefined
+  Flashcard: { id: number }
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -74,4 +74,14 @@ export type MainScreenNavigationProp = BottomTabScreenProps<
 export type LoginScreenNavigationProp = BottomTabScreenProps<
   RootStackParamList,
   'Login'
+>
+
+export type FlashcardScreenNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'Flashcard'
+>
+
+export type MyCollectionNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'MyCollection'
 >
