@@ -7,6 +7,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { Button } from 'native-base'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import FlashcardScreen from './screens/flashcard-screen'
+import DividerQuestions from './components/divider-questions'
 const options = {
   headerShown: false
 }
@@ -17,6 +18,7 @@ type RootStackParamList = {
   MyCollection: undefined
   MyInfo: undefined
   Flashcard: { id: number }
+  DividerQuestions:undefined
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -39,6 +41,7 @@ const Layout = () => {
       {authState?.authenticated ? (
         <>
           <Tab.Screen name="Main" component={MainScreen} />
+          <Tab.Screen name="DividerQuestions" component={DividerQuestions} />
           <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
           <Tab.Screen
             name="MyInfo"
