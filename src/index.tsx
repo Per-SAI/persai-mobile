@@ -22,9 +22,6 @@ type RootStackParamList = {
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
-
-// https://reactnavigation.org/docs/auth-flow/
-// https://www.youtube.com/watch?v=9vydY9SDtAo
 const App = () => {
   return (
     <AuthProvider>
@@ -41,7 +38,19 @@ const Layout = () => {
       {authState?.authenticated ? (
         <>
           <Tab.Screen name="Main" component={MainScreen} />
-          <Tab.Screen name="DividerQuestions" component={DividerQuestions} />
+          <Tab.Screen
+            name="DividerQuestions"
+            component={DividerQuestions}
+            options={{
+              headerRight: () => (
+                <Button onPress={onLogout} variant="link">
+                  Sign Out
+                </Button>
+              ),
+              headerShown: true,
+              title: 'Study Set'
+            }}
+          />
           <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
           <Tab.Screen
             name="MyInfo"
@@ -87,4 +96,8 @@ export type FlashcardScreenNavigationProp = BottomTabScreenProps<
 export type MyCollectionNavigationProp = BottomTabScreenProps<
   RootStackParamList,
   'MyCollection'
+>
+export type DividerQuestionsNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'DividerQuestions'
 >
