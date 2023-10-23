@@ -28,21 +28,23 @@ type StudySet = {
   updatedAt: Date
 }
 
-const MyCollectionScreen = ({navigation}: MyCollectionNavigationProp) => {
+const MyCollectionScreen = ({ navigation }: MyCollectionNavigationProp) => {
   const [collections, setCollections] = useState([])
 
   const handleNavigateFlashcard = (id: number) => {
-    navigation.navigate('Flashcard', {id})
+    navigation.navigate('Flashcard', { id })
   }
 
   useEffect(() => {
     const getMyCollection = async () => {
       console.info('Calling', MY_COLLECTION_URL)
-      const data = await axios.get(MY_COLLECTION_URL)
-      if (data.data) {
-        setCollections(data.data)
-      } else {
-        console.error('Failed to fetch MY_COLLECTION')
+      try {
+        const data = await axios.get(MY_COLLECTION_URL)
+        if (data.data) {
+          setCollections(data.data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch MY_COLLECTION', error) 
       }
     }
 
@@ -56,7 +58,10 @@ const MyCollectionScreen = ({navigation}: MyCollectionNavigationProp) => {
           <Button>Create New</Button>
         </Container>
         {collections.map((col: StudySet) => (
-          <TouchableOpacity key={col.id} onPress={() => handleNavigateFlashcard(col.id)}>
+          <TouchableOpacity
+            key={col.id}
+            onPress={() => handleNavigateFlashcard(col.id)}
+          >
             <Container w="100%" my={2} bg="white" p={5}>
               <Flex
                 borderColor="white"
