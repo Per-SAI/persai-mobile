@@ -31,8 +31,8 @@ type StudySet = {
 const MyCollectionScreen = ({ navigation }: MyCollectionNavigationProp) => {
   const [collections, setCollections] = useState([])
 
-  const handleNavigateFlashcard = () => {
-    navigation.navigate('DividerQuestions')
+  const handleNavigateFlashcard = (id: number) => {
+    navigation.navigate('DividerQuestions', { id })
   }
 
   useEffect(() => {
@@ -55,10 +55,15 @@ const MyCollectionScreen = ({ navigation }: MyCollectionNavigationProp) => {
     <ScrollView>
       <Center safeArea>
         <Container w="100%" mt={3}>
-          <Button>Create New</Button>
+          <Button onPress={() => navigation.navigate('CreateStudySet')}>
+            Create New
+          </Button>
         </Container>
         {collections.map((col: StudySet) => (
-          <TouchableOpacity key={col.id} onPress={() => handleNavigateFlashcard()}>
+          <TouchableOpacity
+            key={col.id}
+            onPress={() => handleNavigateFlashcard(col.id)}
+          >
             <Container w="100%" my={2} bg="white" p={5}>
               <Flex
                 borderColor="white"

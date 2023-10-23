@@ -8,6 +8,7 @@ import { Button } from 'native-base'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import FlashcardScreen from './screens/flashcard-screen'
 import DividerQuestions from './components/divider-questions'
+import CreateStudySet from './screens/create-new-study-set'
 const options = {
   headerShown: false
 }
@@ -18,7 +19,8 @@ type RootStackParamList = {
   MyCollection: undefined
   MyInfo: undefined
   Flashcard: { id: number }
-  DividerQuestions:undefined
+  DividerQuestions: { id: number }
+  CreateStudySet: undefined
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -42,6 +44,7 @@ const Layout = () => {
             name="DividerQuestions"
             component={DividerQuestions}
             options={{
+              tabBarItemStyle: {display: 'none'},
               headerRight: () => (
                 <Button onPress={onLogout} variant="link">
                   Sign Out
@@ -50,6 +53,12 @@ const Layout = () => {
               headerShown: true,
               title: 'Study Set'
             }}
+          />
+
+          <Tab.Screen
+            name="CreateStudySet"
+            component={CreateStudySet}
+            options={{ tabBarItemStyle: { display: 'none' } }}
           />
           <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
           <Tab.Screen
@@ -100,4 +109,8 @@ export type MyCollectionNavigationProp = BottomTabScreenProps<
 export type DividerQuestionsNavigationProp = BottomTabScreenProps<
   RootStackParamList,
   'DividerQuestions'
+>
+export type CreateStudySetNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'CreateStudySet'
 >
