@@ -44,12 +44,7 @@ const Layout = () => {
             name="DividerQuestions"
             component={DividerQuestions}
             options={{
-              tabBarItemStyle: {display: 'none'},
-              headerRight: () => (
-                <Button onPress={onLogout} variant="link">
-                  Sign Out
-                </Button>
-              ),
+              tabBarItemStyle: { display: 'none' },
               headerShown: true,
               title: 'Study Set'
             }}
@@ -74,7 +69,14 @@ const Layout = () => {
               title: 'Profile'
             }}
           />
-          <Tab.Screen name="Flashcard" component={FlashcardScreen} />
+          <Tab.Screen
+            name="Flashcard"
+            component={FlashcardScreen}
+            options={{
+              tabBarItemStyle: { display: 'none' },
+              unmountOnBlur: true
+            }}
+          />
         </>
       ) : (
         <Tab.Screen

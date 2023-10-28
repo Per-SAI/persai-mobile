@@ -1,24 +1,22 @@
 import ProgressNav from '../components/progress-nav'
 import Card from '../components/flashcard-question-box'
-import { VStack, Center, ScrollView, Box, HStack, Button } from 'native-base'
+import { VStack, Center, HStack, Button, View } from 'native-base'
 import ProgressBar from '../components/progress-bar'
 import LearnOptions from '../components/learn-options'
 import { useEffect, useState } from 'react'
 import { FlashcardScreenNavigationProp } from '..'
-import axios from 'axios'
+import axios from '../constants/axios'
 import { GET_STUDY_SET_BY_ID_URL } from '../constants/urls'
 
-type QuestionResponses =
-  | {
-      id: number
-      question: string
-      answers: Array<string>
-      correctAnswer: string
-      fullGptAnswer: null
-      note: string | null
-      gptGenerated: boolean
-    }
-  | []
+type QuestionResponses = {
+  id: number
+  question: string
+  answers: Array<string>
+  correctAnswer: string
+  fullGptAnswer: null
+  note: string | null
+  gptGenerated: boolean
+}
 
 type Props = {
   id: number
@@ -42,24 +40,31 @@ const FlashcardScreen = ({
   route
 }: FlashcardScreenNavigationProp) => {
   const [studySet, setStudySet] = useState<QuestionResponses[]>([])
+  const [current, setCurrent] = useState(0)
+  const [started, setStarted] = useState(false)
+
+  const handleOnStarted = () => {
+    setStarted((e) => !e)
+  }
+
+  console.log(started)
 
   useEffect(() => {
     const getStudySet = async () => {
-      const id = route.params.id
-      const link = `${GET_STUDY_SET_BY_ID_URL}/${id}`
-      const data = await axios.get(link)
-      if (data) {
-        console.log(data.data)
-        setStudySet(data.data.questionResponses)
+      try {
+        const id = route.params.id
+        const link = `${GET_STUDY_SET_BY_ID_URL}/${id}`
+        const data = await axios.get(link)
+        if (data) {
+          setStudySet(data.data.questionResponses)
+        }
+      } catch (error) {
+        console.error(error)
       }
     }
 
     getStudySet()
   }, [route.params.id])
-
-  console.log(studySet)
-
-  const [current, setCurrent] = useState(0)
 
   const onPrevious = () => {
     if (studySet) {
@@ -84,14 +89,13 @@ const FlashcardScreen = ({
 
   return (
     <VStack alignItems="center" space={3} h="full">
-      <ProgressNav />
+      <ProgressNav showOnUI={started} />
       <HStack top="50%" mx={3}>
         <Button onPress={onPrevious}>{'<'}</Button>
         <Center flex={1} justifyContent="center" alignItems="center">
-          {/* {questionResponses.map((question) => {
-              return <Card key={question.id} position={0} />
-            })} */}
-          <Card position={0} questions={studySet} current={current} />
+          {studySet.length >= 1 && (
+            <Card position={0} questions={studySet} current={current} />
+          )}
           {/* <Card position={1} />
             <Card position={0.5} />
             <Card position={0} /> */}
@@ -107,8 +111,13 @@ const FlashcardScreen = ({
         bottom="-50%"
         space={4}
       >
-        <ProgressBar />
-        <LearnOptions />
+        {started ? (
+          <View flex={1}>
+            <ProgressBar current={current} total={studySet.length} />
+          </View>
+        ) : (
+          <LearnOptions showOnUI={started} onStarted={handleOnStarted} />
+        )}
       </VStack>
     </VStack>
   )

@@ -1,7 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { NativeBaseProvider } from 'native-base'
 import theme from '../theme'
-import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context'
+import {
+  SafeAreaProvider,
+  initialWindowMetrics
+} from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 type Props = {
   children: React.ReactNode
@@ -10,9 +14,11 @@ type Props = {
 const AppContainer = (props: Props) => {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <NavigationContainer>
-        <NativeBaseProvider>{props.children}</NativeBaseProvider>
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <NativeBaseProvider>{props.children}</NativeBaseProvider>
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   )
 }

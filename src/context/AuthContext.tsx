@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { WEB_CLIENT_ID, IOS_CLIENT_ID } from '../constants/env'
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
+import {
+  GoogleSignin,
+  statusCodes
+} from '@react-native-google-signin/google-signin'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LOGIN_URL } from '../constants/urls'
 import axios from '../constants/axios'

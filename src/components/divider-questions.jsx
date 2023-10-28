@@ -1,43 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Heading, Box } from 'native-base';
-import { Divider } from 'native-base';
-import { Flex } from 'native-base';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AsyncStorage } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Heading, Box } from 'native-base'
+import { Divider, Button } from 'native-base'
+import { Flex } from 'native-base'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import axios from '../constants/axios'
+import { GET_STUDY_SET_BY_ID_URL } from '../constants/urls'
 
-export default function DividerQuestions() {
-  
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-
-  const getStudySets = async () => {
-    try {
-      const token =
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dW9uZ3RyYW5kaWV1YW5oMTRAZ21haWwuY29tIiwicm9sZSI6IlNUVURFTlQiLCJpYXQiOjE2OTc2MTg2MzcsImV4cCI6MTY5NzYyNTgzN30.s0H16sCkp-1SK1bFm5mBeEeKMUUVCDmmTJqkDjxbNsTSEMpdoc3GRlFU9aoT_LpV6zILZ1WR81ObsfnaiHK6Tw'; // Replace with your authentication token
-      const response = await fetch(
-        `http://persai-env-v1.ap-southeast-1.elasticbeanstalk.com/api/v1/study-set/39`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const json = await response.json();
-      console.log(json);
-      setData(json);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+export default function DividerQuestions({ route, navigation }) {
+  const [data, setData] = useState([])
+  const [selectedId, setSelectedId] = useState(null)
 
   useEffect(() => {
-    getStudySets();
-  }, []);
+    const getStudySets = async () => {
+      try {
+        const id = route.params.id
+        const response = await axios.get(`${GET_STUDY_SET_BY_ID_URL}/${id}`)
+        if (response.data) {
+          setData(response.data)
+          setSelectedId(id)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getStudySets()
+  }, [])
+
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarItemStyle: { display: 'none' },
+      headerRight: () => {
+        return (
+          <Button
+            variant="link"
+            onPress={() => {
+              navigation.navigate('Flashcard', { id: selectedId })
+            }}
+          >
+            Study
+          </Button>
+        )
+      }
+    })
+  }, [navigation, selectedId])
 
   return (
     <SafeAreaView>
@@ -63,10 +68,10 @@ export default function DividerQuestions() {
                 orientation="vertical"
                 mx="3"
                 _light={{
-                  bg: 'muted.800',
+                  bg: 'muted.800'
                 }}
                 _dark={{
-                  bg: 'muted.50',
+                  bg: 'muted.50'
                 }}
               />
               <Heading py="2" width="20%" fontSize="14px">
@@ -76,5 +81,5 @@ export default function DividerQuestions() {
           ))}
       </Box>
     </SafeAreaView>
-  );
+  )
 }

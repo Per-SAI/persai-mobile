@@ -3,12 +3,13 @@ import { ScrollView, Text } from 'native-base'
 import { MainScreenNavigationProp } from '..'
 import { VStack, Center } from 'native-base'
 import { SafeAreaView } from 'react-native'
+import { GET_ALL_STUDY_SET_URL } from '../constants/urls'
 const MainScreen = ({ navigation }: MainScreenNavigationProp) => {
   const [studySets, setStudySets] = useState<any[]>([])
 
   useEffect(() => {
     fetch(
-      'http://persai-env-v1.ap-southeast-1.elasticbeanstalk.com/api/v1/study-set'
+      GET_ALL_STUDY_SET_URL
     )
       .then((response) => response.json())
       .then((data: any[]) => setStudySets(data))
