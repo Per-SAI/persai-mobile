@@ -145,7 +145,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 28,
+    margin: 8,
     justifyContent: 'center',
     flexDirection: 'column'
   },
@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 9
     },
-    shadowOpacity: 0.89,
-    shadowRadius: 12,
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
     elevation: 4
   },
   titleBox: {
