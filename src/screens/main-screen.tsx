@@ -17,7 +17,7 @@ const MainScreen = ({ navigation }: MainScreenNavigationProp) => {
   }, [])
 
   return (
-    <ScrollView>
+    <ScrollView contentInsetAdjustmentBehavior="automatic">
       <SafeAreaView>
       <Text style={{fontSize:20,textAlign:'center'}}>This is our featured courses</Text>
       <VStack space={4} alignItems="center" mt="4%">
