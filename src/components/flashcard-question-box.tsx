@@ -29,7 +29,8 @@ type Props = {
 
 const Card = (props: Props) => {
   const { position, questions, current } = props
-  const [shown, setShown] = useState<string>()
+  const [shownQuestion, setShownQuestion] = useState<string>()
+  const [shownOptions, setShownOptions] = useState<string[]>([])
   const [flipped, setFlipped] = useState(false)
   const backgroundColor = mixColor(position, '#C9E9E7', '#74BCB8')
   const translateY = mix(position, 0, -30)
@@ -37,16 +38,19 @@ const Card = (props: Props) => {
 
   const handleFlip = () => {
     if (!flipped) {
-      setShown(questions[current].correctAnswer)
+      setShownQuestion(questions[current].correctAnswer)
+      setShownOptions([])
       setFlipped((prev) => !prev)
     } else {
-      setShown(questions[current].question)
+      setShownQuestion(questions[current].question)
+      setShownOptions(questions[current].answers)
       setFlipped((prev) => !prev)
     }
   }
 
   useEffect(() => {
-    setShown(questions[current].question)
+    setShownQuestion(questions[current].question)
+    setShownOptions(questions[current].answers)
     setFlipped(false)
   }, [current])
 
@@ -82,7 +86,7 @@ const Card = (props: Props) => {
     >
       <TouchableOpacity onPress={handleFlip}>
         <Center height="full" width="full">
-          {shown && <Question question={shown} />}
+          {shownQuestion && <Question question={shownQuestion} options={shownOptions} />}
         </Center>
       </TouchableOpacity>
     </Animated.View>
