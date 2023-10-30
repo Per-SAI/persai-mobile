@@ -19,8 +19,9 @@ type RootStackParamList = {
   MyCollection: undefined
   MyInfo: undefined
   Flashcard: { id: number }
-  DividerQuestions: { id: number }
+  DividerQuestions: undefined
   CreateStudySet: undefined
+
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
