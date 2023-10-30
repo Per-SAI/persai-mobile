@@ -20,7 +20,7 @@ type RootStackParamList = {
   MyInfo: undefined
   Flashcard: { id: number }
   DividerQuestions: undefined
-  CreateStudySet: undefined
+  CreateStudySet: { id: number }
 
 }
 
