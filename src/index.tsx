@@ -10,6 +10,7 @@ import FlashcardScreen from './screens/flashcard-screen'
 import DividerQuestions from './components/divider-questions'
 import CreateStudySet from './screens/create-new-study-set'
 import { AntDesign } from '@expo/vector-icons'
+import MultipleTestScreen from './screens/multiple-test-screen'
 const options = {
   headerShown: false
 }
@@ -20,8 +21,9 @@ type RootStackParamList = {
   MyCollection: undefined
   MyInfo: undefined
   Flashcard: { id: number }
-  DividerQuestions: undefined
-  CreateStudySet: { id: number }
+  DividerQuestions: { id: number }
+  CreateStudySet: undefined,
+  MultipleChoice: undefined
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -97,6 +99,7 @@ const Layout = () => {
               unmountOnBlur: true
             }}
           />
+          <Tab.Screen name="MultipleChoice" component={MultipleTestScreen} />
         </>
       ) : (
         <Tab.Screen

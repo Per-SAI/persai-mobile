@@ -7,62 +7,152 @@ import {
   Pressable,
   TextInput,
   ScrollView,
-  Keyboard
+  ActivityIndicator,
+  Alert
 } from 'react-native'
-import React from 'react'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Clipboard } from 'react-native'
-import { border } from 'native-base/lib/typescript/theme/styled-system'
+import * as Clipboard from 'expo-clipboard'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../context/AuthContext'
+import {
+  GET_CURRENT_LOGGED_USER_URL,
+  PUT_CURRENT_LOGGED_USER_URL,
+  PUT_REFERRAL_CODE_URL
+} from '../constants/urls'
+import { Button, Center, Modal } from 'native-base'
+import * as Linking from 'expo-linking'
+import axios from '../constants/axios'
+import { isAxiosError } from 'axios'
+
+type userData = {
+  createdAt: Date
+  earnedMoney: number
+  email: string
+  enabled: boolean
+  feImageName: string
+  fullName: string
+  gptRemainingUsage: number
+  id: string
+  referralCode: {
+    referenceNumber: number
+    referralCode: string
+    usingReferralCode: boolean
+  }
+  role: 'STUDENT'
+  status: string
+  subscription: {
+    currentSubscriptionId: string
+    expiredDatetime: Date
+    paidSubscriptionId: string
+    paidType: string
+  }
+  theme: 'DEFAULT'
+  updatedAt: Date
+}
+
 const ProfileScreen = () => {
-  const [text, onChangeText] = React.useState('')
-  const email = 'e6d55773885a'
-  const copyIt = () => Clipboard.setString(email)
+  const [invitationCode, setInvitationCode] = useState('')
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const { authState } = useAuth()
+  const [userData, setUserData] = useState<userData | null>(null)
+  const [updatedName, setUpdatedName] = useState<string>('')
+  const [displayedName, setDisplayedName] = useState<string>('')
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+  const [size, _] = useState<string>('xs')
+
+  useEffect(() => {
+    const boostrap = async () => {
+      if (authState) {
+        const { accessToken } = authState
+        console.log(accessToken)
+        const res = await axios.get(GET_CURRENT_LOGGED_USER_URL)
+        if (res.data) {
+          setUserData(res.data)
+          setDisplayedName(res.data.fullName)
+          console.log(res.data)
+          setIsLoading(false)
+        }
+      }
+    }
+
+    boostrap()
+  }, [])
+
+  const handleOnUpdateName = async () => {
+    if (updatedName.length >= 8 && updatedName.length <= 50) {
+      try {
+        const res = await axios.put(PUT_CURRENT_LOGGED_USER_URL, {
+          fullName: updatedName,
+          theme: 'DEFAULT'
+        })
+        if (res.status === 200) {
+          setDisplayedName(updatedName)
+          setModalVisible(false)
+          Alert.alert('Name Updated.')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    } else {
+      Alert.alert('Name should contains at least 8 and at most 50 characters.')
+      return
+    }
+  }
+
+  const copyToClipboard = async () => {
+    if (userData) {
+      await Clipboard.setStringAsync(userData.referralCode.referralCode)
+      Alert.alert('Copied.')
+    }
+  }
+
+  const handleSubmitInvitationCode = async () => {
+    if (invitationCode) {
+      try {
+        const res = await axios.put(PUT_REFERRAL_CODE_URL, {
+          referralCode: invitationCode
+        })
+        if (res.status === 200) {
+          Alert.alert(
+            "Congratulations! You've got 15 days of premium. Sign out is required to take effect!"
+          )
+          return
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          if (error?.response?.status === 400) {
+            Alert.alert('Invitation code not found.')
+            return
+          }
+        }
+      }
+    }
+  }
+
+  if (isLoading || userData === null)
+    return (
+      <Center flex={1} justifyContent='center' alignItems='center'>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </Center>
+    )
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* <View style={styles.infoLine}>
-        <Image
-          style={styles.avt}
-          source={{
-            uri: 'https://scontent.fsgn5-15.fna.fbcdn.net/v/t39.30808-1/378527200_3396876093940633_2094362321451650403_n.jpg?stp=dst-jpg_p200x200&_nc_cat=111&ccb=1-7&_nc_sid=fe8171&_nc_ohc=lpzjfDAVimQAX87L1kr&_nc_ht=scontent.fsgn5-15.fna&oh=00_AfDFQKIEltmSN3xJobdxNFUoAUOhQs4l6ha0uBLJSTYT_Q&oe=652C54A2'
-          }}
-        />
-        <Text style={styles.avatarName}>Đinh Long Hoàng</Text>
-      </View>
-
-      <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => {}}
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white'
-              },
-              styles.wrapperCustom
-            ]}
-          >
-            {({ pressed }) => (
-              <View style={styles.item}>
-                <Text style={styles.title}>{item}</Text>
-              </View>
-            )}
-          </Pressable>
-        )}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
-      /> */}
         <View style={styles.headerInfo}>
           <View style={styles.headerInfo_Text}>
-            <Text>Hi, Đinh Hoàng Long</Text>
+            <Text>{displayedName},</Text>
+            <Button
+              variant="link"
+              onPress={() => setModalVisible((prev) => !prev)}
+            >
+              Edit
+            </Button>
             <Text style={styles.welcomeText}>Welcome back</Text>
           </View>
           <Image
             style={styles.avt}
             source={{
-              uri: 'https://w.wallhaven.cc/full/jx/wallhaven-jxl31y.png'
+              uri: userData.feImageName
             }}
           />
         </View>
@@ -84,14 +174,29 @@ const ProfileScreen = () => {
                 textAlign: 'center'
               }}
             >
-              4 days left
+              {userData.subscription.currentSubscriptionId} PLAN
             </Text>
-            <Text style={{ color: 'white', fontSize: 30, marginTop: 64 }}>
-              340 / $20
-            </Text>
-            <Text style={{ color: 'wheat' }}>
-              Payment for upcoming charging session
-            </Text>
+            {userData.subscription.currentSubscriptionId === 'PRO' ? (
+              <>
+                <Text style={{ color: 'white', fontSize: 24, marginTop: 86 }}>
+                  Expired At{' '}
+                  {new Date(
+                    userData.subscription.expiredDatetime
+                  ).toDateString()}
+                </Text>
+                {/* <Text style={{ color: 'wheat' }}>
+                  Payment for upcoming charging session
+                </Text> */}
+              </>
+            ) : (
+              <Button
+                mt={2}
+                variant="subtle"
+                onPress={() => Linking.openURL('https://me.momo.vn/PerSai')}
+              >
+                Upgrade Now!
+              </Button>
+            )}
           </View>
         </View>
         <View style={styles.detailSection}>
@@ -101,13 +206,13 @@ const ProfileScreen = () => {
               flexWrap: 'wrap',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingTop: 30,
+              paddingTop: 10,
               rowGap: 20
             }}
           >
             <Text style={styles.titleBox}>Your referral code</Text>
 
-            <Pressable style={styles.detailBox} onPress={copyIt}>
+            <Pressable style={styles.detailBox} onPress={copyToClipboard}>
               <View
                 style={{
                   display: 'flex',
@@ -125,27 +230,57 @@ const ProfileScreen = () => {
                   textAlign: 'center'
                 }}
               >
-                e6d55773885a
+                {userData.referralCode.referralCode}
               </Text>
             </Pressable>
-            <Text style={styles.titleBox}>Enter you invitation code</Text>
+            <Text style={styles.titleBox}>Invitation code</Text>
 
             <TextInput
               style={styles.input}
-              onChangeText={onChangeText}
-              value={text}
-              placeholder="Input here ..."
+              onChangeText={setInvitationCode}
+              value={invitationCode}
+              placeholder="Invitation code"
             />
+            <Button onPress={handleSubmitInvitationCode}>Submit</Button>
           </View>
         </View>
       </ScrollView>
+      <Modal isOpen={modalVisible} onClose={setModalVisible} size={size}>
+        <Modal.Content maxH="212">
+          <Modal.CloseButton />
+          <Modal.Header>Change your name</Modal.Header>
+          <Modal.Body>
+            <ScrollView>
+              <TextInput
+                placeholder="Your name"
+                onChangeText={(text) => setUpdatedName(text)}
+                value={updatedName}
+              ></TextInput>
+            </ScrollView>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setModalVisible(false)
+                }}
+              >
+                Cancel
+              </Button>
+              <Button onPress={handleOnUpdateName}>Save</Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 8,
+    margin: 10,
     justifyContent: 'center',
     flexDirection: 'column'
   },
@@ -171,20 +306,20 @@ const styles = StyleSheet.create({
   paymentCard: {
     flex: 2,
     backgroundColor: 'black',
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
     position: 'relative',
     height: 200
   },
   cardBackground: {
-    flex: 2
+    flex: 2,
+    opacity: 0.6
   },
   cardTextBox: { position: 'absolute', padding: 24 },
   detailSection: {
-    flex: 3,
-
-    paddingTop: 10,
-    paddingBottom: 200
+    flex: 3
+    // paddingTop: 10,
+    // paddingBottom: 200
   },
   titleSection: {
     display: 'flex',
@@ -212,7 +347,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 18,
     textAlign: 'left',
-    paddingLeft: 16,
+    // paddingLeft: 16,
     paddingTop: 24,
     color: 'black'
   },
@@ -220,7 +355,7 @@ const styles = StyleSheet.create({
     height: 40,
     textAlign: 'left',
     width: '100%',
-    margin: 12,
+    // margin: 12,
     borderBottomWidth: 1,
     borderColor: '#00AB55',
     fontSize: 20,

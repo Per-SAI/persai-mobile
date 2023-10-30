@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { MainScreenNavigationProp } from '..'
-import { GET_ALL_STUDY_SET_URL } from '../constants/urls'
+import { GET_ALL_STUDY_SET_URL, host } from '../constants/urls'
 import {
   Box,
   FlatList,
@@ -17,7 +17,7 @@ const MainScreen = ({ navigation }: MainScreenNavigationProp) => {
   const [studySets, setStudySets] = useState<any[]>([])
 
   useEffect(() => {
-    fetch(GET_ALL_STUDY_SET_URL)
+    fetch(host + GET_ALL_STUDY_SET_URL)
       .then((response) => response.json())
       .then((data: any[]) => setStudySets(data))
       .catch((error) => console.error('Error fetching data:', error))

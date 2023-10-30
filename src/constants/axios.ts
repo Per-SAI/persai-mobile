@@ -16,7 +16,7 @@ const getBaseUrl = () => {
 }
 
 const axiosInstance = axios.create({
-  baseURL: 'http://persai-env-v1.ap-southeast-1.elasticbeanstalk.com/',
+  baseURL: 'https://main.persai.space/',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
