@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import FlashcardScreen from './screens/flashcard-screen'
 import DividerQuestions from './components/divider-questions'
 import CreateStudySet from './screens/create-new-study-set'
+import { AntDesign } from '@expo/vector-icons'
 const options = {
   headerShown: false
 }
@@ -21,7 +22,6 @@ type RootStackParamList = {
   Flashcard: { id: number }
   DividerQuestions: undefined
   CreateStudySet: { id: number }
-
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -40,7 +40,15 @@ const Layout = () => {
     <Tab.Navigator screenOptions={options}>
       {authState?.authenticated ? (
         <>
-          <Tab.Screen name="Main" component={MainScreen} />
+          <Tab.Screen
+            name="Main"
+            component={MainScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <AntDesign name="home" size={24} color="black" />
+              )
+            }}
+          />
           <Tab.Screen
             name="DividerQuestions"
             component={DividerQuestions}
@@ -56,11 +64,22 @@ const Layout = () => {
             component={CreateStudySet}
             options={{ tabBarItemStyle: { display: 'none' } }}
           />
-          <Tab.Screen name="MyCollection" component={MyCollectionScreen} />
+          <Tab.Screen
+            name="MyCollection"
+            component={MyCollectionScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <AntDesign name="book" size={24} color="black" />
+              )
+            }}
+          />
           <Tab.Screen
             name="MyInfo"
             component={ProfileScreen}
             options={{
+              tabBarIcon: ({ color, size }) => (
+                <AntDesign name="profile" size={24} color="black" />
+              ),
               headerRight: () => (
                 <Button onPress={onLogout} variant="link">
                   Sign Out
