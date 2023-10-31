@@ -22,7 +22,8 @@ type AuthProps = {
     idToken: string | null
     authenticated: boolean | null
     accessToken: string | null
-    refreshToken: string | null
+    refreshToken: string | null,
+    role: string | null
   }
   onLogout?: () => Promise<any>
   onLogin?: () => Promise<any>
@@ -31,7 +32,8 @@ type AuthProps = {
       idToken: string | null
       authenticated: boolean | null
       accessToken: string | null
-      refreshToken: string | null
+      refreshToken: string | null,
+      role: string | null
     }>
   >
 }
@@ -55,11 +57,13 @@ export const AuthProvider = ({ children }: Props) => {
     authenticated: boolean | null
     accessToken: string | null
     refreshToken: string | null
+    role: string | null
   }>({
     idToken: null,
     authenticated: null,
     accessToken: null,
-    refreshToken: null
+    refreshToken: null,
+    role: null
   })
 
   useEffect(() => {
@@ -76,7 +80,8 @@ export const AuthProvider = ({ children }: Props) => {
               idToken: userInfo.idToken,
               authenticated: true,
               accessToken: tokens.accessToken,
-              refreshToken: tokens.refreshToken
+              refreshToken: tokens.refreshToken,
+              role: tokens.userResponse.role
             })
           }
         }
@@ -119,7 +124,8 @@ export const AuthProvider = ({ children }: Props) => {
           idToken: idToken,
           authenticated: true,
           accessToken: accessToken,
-          refreshToken: data.refeshToken
+          refreshToken: data.refeshToken,
+          role: data.userResponse.role
         })
       }
     } catch (e) {
@@ -134,7 +140,8 @@ export const AuthProvider = ({ children }: Props) => {
       idToken: null,
       authenticated: null,
       accessToken: null,
-      refreshToken: null
+      refreshToken: null,
+      role: null
     })
   }
 

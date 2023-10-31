@@ -11,6 +11,9 @@ import DividerQuestions from './components/divider-questions'
 import CreateStudySet from './screens/create-new-study-set'
 import { AntDesign } from '@expo/vector-icons'
 import MultipleTestScreen from './screens/multiple-test-screen'
+import AdminUser from './screens/admin/user'
+import AdminSubscription from './screens/admin/subscription'
+import AdminTools from './screens/admin/tools'
 const options = {
   headerShown: false
 }
@@ -24,6 +27,9 @@ type RootStackParamList = {
   DividerQuestions: { id: number }
   CreateStudySet: undefined
   MultipleChoice: { id: number }
+  AdminUser: undefined
+  AdminSubscription: undefined
+  AdminTools: undefined
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -37,6 +43,14 @@ const App = () => {
 
 const Layout = () => {
   const { authState, onLogout } = useAuth()
+
+  if (authState?.authenticated && authState?.role === 'ADMIN') {
+    return <Tab.Navigator screenOptions={options}>
+      <Tab.Screen name="AdminUser" component={AdminUser}  />
+      <Tab.Screen name="AdminSubscription" component={AdminSubscription}  />
+      <Tab.Screen name="AdminTools" component={AdminTools}  />
+    </Tab.Navigator>
+  }
 
   return (
     <Tab.Navigator screenOptions={options}>
