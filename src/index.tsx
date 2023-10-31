@@ -22,10 +22,8 @@ type RootStackParamList = {
   MyInfo: undefined
   Flashcard: { id: number }
   DividerQuestions: { id: number }
-
-  // DividerQuestions: undefined,
   CreateStudySet: undefined
-  MultipleChoice: undefined
+  MultipleChoice: { id: number }
 }
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -59,7 +57,8 @@ const Layout = () => {
             options={{
               tabBarItemStyle: { display: 'none' },
               headerShown: true,
-              title: 'Study Set'
+              title: 'Study Set',
+              unmountOnBlur: true
             }}
           />
 
@@ -104,11 +103,7 @@ const Layout = () => {
           <Tab.Screen
             name="MultipleChoice"
             component={MultipleTestScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <AntDesign name="questioncircleo" size={24} color="black" />
-              )
-            }}
+            options={{ tabBarItemStyle: { display: 'none' } }}
           />
         </>
       ) : (

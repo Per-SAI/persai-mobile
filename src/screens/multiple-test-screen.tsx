@@ -21,7 +21,7 @@ import NumericInput from 'react-native-numeric-input'
 import { Alert } from 'react-native'
 import { MultipleChoiceNavigationProp } from '..'
 
-const MultipleTestScreen = ({ navigation }: MultipleChoiceNavigationProp) => {
+const MultipleTestScreen = ({ navigation, route }: MultipleChoiceNavigationProp) => {
   const [started, setStarted] = useState<boolean>(false)
   const [time, setTime] = useState<number>(0)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
@@ -37,6 +37,7 @@ const MultipleTestScreen = ({ navigation }: MultipleChoiceNavigationProp) => {
     ),
     []
   )
+  let id = route.params.id
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
@@ -97,7 +98,7 @@ const MultipleTestScreen = ({ navigation }: MultipleChoiceNavigationProp) => {
           started={started}
           openPomodoro={handlePresentModalPress}
         />
-        <MultipleTestQuestionBox />
+        <MultipleTestQuestionBox id={id} />
       </ScrollView>
       <BottomSheetModalProvider>
         <View>

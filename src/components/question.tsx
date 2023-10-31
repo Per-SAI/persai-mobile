@@ -7,6 +7,8 @@ type Props = {
   alt?: string
 }
 
+const OPTIONS_KEY = ['a. ', 'b. ', 'c. ', 'd. ']
+
 const Question = (props: Props) => {
   const { question, options, image, alt } = props
   return (
@@ -16,7 +18,7 @@ const Question = (props: Props) => {
       </Text>
       {options?.map((ops, index) => (
         <Text color="#212B36" fontSize="16" fontWeight="semibold" key={index}>
-          {ops}
+          {OPTIONS_KEY[index]}{ops}
         </Text>
       ))}
       <Text color="#212B36" fontSize="16" fontWeight="semibold"></Text>

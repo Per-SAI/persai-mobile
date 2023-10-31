@@ -7,59 +7,32 @@ import { AlertDialog } from 'native-base'
 import React, { useContext, useEffect, useState } from 'react'
 import DataContext, { DataProvider } from '../context/DataContext'
 import { ActivityIndicator } from 'react-native'
+import axios from '../constants/axios'
+import { GET_STUDY_SET_BY_ID_URL } from '../constants/urls'
 
 type Props = {
-  data: {
-    answers: Array<string>
-    correctAnswer: string
-    fullGptAnswer?: null
-    gptGenerated?: boolean
-    id: number
-    note?: string | null
-    question: string
-  }
+  id: number
 }
 
-const data = [
-  {
-    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
-    correctAnswer: 'choice 1',
-    fullGptAnswer: null,
-    gptGenerated: false,
-    id: 114,
-    note: null,
-    question: 'question 1'
-  },
-  {
-    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
-    correctAnswer: 'choice 1',
-    fullGptAnswer: null,
-    gptGenerated: false,
-    id: 115,
-    note: null,
-    question: 'question 2'
-  },
-  {
-    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
-    correctAnswer: 'choice 1',
-    fullGptAnswer: null,
-    gptGenerated: false,
-    id: 116,
-    note: null,
-    question: 'question 3'
-  },
-  {
-    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
-    correctAnswer: 'choice 1',
-    fullGptAnswer: null,
-    gptGenerated: false,
-    id: 117,
-    note: null,
-    question: 'question 4'
-  }
-]
+type dataType = {
+  answers: Array<string>
+  correctAnswer: string
+  fullGptAnswer?: null
+  gptGenerated?: boolean
+  id: number
+  note?: string | null
+  question: string
+}
 
-const SingleBox = ({ data }: Props) => {
+type SingleBoxProps = {
+  data: dataType
+}
+
+type QuestionBoxProps = {
+  data: dataType
+}
+
+const SingleBox = ({ data }: SingleBoxProps) => {
   const { question, answers, id } = data
   const [pressed, setPressed] = useState<number | null>(null)
   const { session, mode } = useContext(DataContext)
@@ -142,9 +115,7 @@ const SingleBox = ({ data }: Props) => {
   )
 }
 
-const QuestionBox = (props: Props) => {
-  const { data } = props
-
+const QuestionBox = ({ data }: QuestionBoxProps) => {
   const width = useBreakpointValue({
     lg: 'full'
   })
@@ -179,20 +150,33 @@ const useFlexDirection = (components: Array<React.ReactNode>) => {
   return flexDir
 }
 
-const Layout = () => {
+const Layout = ({ id }: Props) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const { setStudySet, handleOnSubmit, mode, resetSession } =
     useContext(DataContext)
 
   const onClose = () => setIsOpen(false)
-
+  const [data, setData] = useState<dataType[] | []>([])
   const cancelRef = React.useRef(null)
 
   useEffect(() => {
-    if (setStudySet) {
-      setStudySet(data)
+    const bootstrap = async () => {
+      if (setStudySet && id) {
+        try {
+          const link = `${GET_STUDY_SET_BY_ID_URL}/${id}`
+          const res = await axios.get(link)
+          if (res) {
+            setData(res.data.questionResponses)
+            setStudySet(res.data.questionResponses)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
     }
-  }, [data])
+
+    bootstrap()
+  }, [id])
 
   const handleOnPressSubmit = () => {
     if (handleOnSubmit) {
@@ -211,8 +195,8 @@ const Layout = () => {
     return (
       <>
         <Box safeAreaBottom={9} m={4}>
-          {data.map((item) => (
-            <QuestionBox data={item} key={item.id} />
+          {data.map((item, index) => (
+            <QuestionBox data={item} key={index} />
           ))}
           <Button
             colorScheme="green"
@@ -273,10 +257,10 @@ const Layout = () => {
   }
 }
 
-const MultipleTestQuestionBox = () => {
+const MultipleTestQuestionBox = ({ id }: Props) => {
   return (
     <DataProvider>
-      <Layout />
+      <Layout id={id} />
     </DataProvider>
   )
 }

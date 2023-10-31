@@ -76,7 +76,7 @@ const MainScreen = ({ navigation }: MainScreenNavigationProp) => {
                   h="150%"
                   style={{ resizeMode: 'contain', marginTop: '20%' }}
                   source={{
-                    uri: item.creator.userAvatar
+                    uri: item.feImageName
                   }}
                   alt="bg"
                 />
