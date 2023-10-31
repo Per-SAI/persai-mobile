@@ -22,7 +22,9 @@ type RootStackParamList = {
   MyInfo: undefined
   Flashcard: { id: number }
   DividerQuestions: { id: number }
-  CreateStudySet: undefined,
+
+  // DividerQuestions: undefined,
+  CreateStudySet: undefined
   MultipleChoice: undefined
 }
 
@@ -99,7 +101,15 @@ const Layout = () => {
               unmountOnBlur: true
             }}
           />
-          <Tab.Screen name="MultipleChoice" component={MultipleTestScreen} />
+          <Tab.Screen
+            name="MultipleChoice"
+            component={MultipleTestScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <AntDesign name="questioncircleo" size={24} color="black" />
+              )
+            }}
+          />
         </>
       ) : (
         <Tab.Screen

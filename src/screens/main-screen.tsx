@@ -3,95 +3,118 @@ import { MainScreenNavigationProp } from '..'
 import { GET_ALL_STUDY_SET_URL, host } from '../constants/urls'
 import {
   Box,
-  FlatList,
-  Heading,
-  Avatar,
   HStack,
-  VStack,
   Text,
   Spacer,
-  useSafeArea
+  Pressable,
+  Flex,
+  Image,
+  ScrollView,
+  Center
 } from 'native-base'
-import { TouchableOpacity } from 'react-native'
+import { ActivityIndicator } from 'react-native'
 const MainScreen = ({ navigation }: MainScreenNavigationProp) => {
   const [studySets, setStudySets] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(host + GET_ALL_STUDY_SET_URL)
       .then((response) => response.json())
-      .then((data: any[]) => setStudySets(data))
-      .catch((error) => console.error('Error fetching data:', error))
+      .then((data: any[]) => {
+        setStudySets(data)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+        setLoading(false)
+      })
   }, [])
 
-  const safeAreaProps = useSafeArea({
-    safeAreaTop: true,
-    pt: 2
-  })
   return (
-    <Box {...safeAreaProps} style={{ padding: 20 }}>
-      <Heading fontSize="xl" p="4" pb="3" textAlign="center">
-        Featured Study Set
-      </Heading>
-      <FlatList
-        data={studySets}
-        renderItem={({ item: studySet }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DividerQuestions')}
-          >
-            <Box
-              borderBottomWidth="1"
-              _dark={{
-                borderColor: 'muted.50'
+    <ScrollView>
+      {loading ? (
+        <Center flex={1} justifyContent="center" alignItems="center" mt="100%">
+          <ActivityIndicator size="large" color="#00ff00" />
+        </Center>
+      ) : (
+        <Box
+          alignItems="center"
+          w="100%"
+          display="flex"
+          flexDirection="column"
+          mt="20"
+        >
+          {studySets.map((item, index) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                navigation.navigate('DividerQuestions', {
+                  id: item.id
+                })
               }}
-              borderColor="muted.800"
-              pl={['0', '4']}
-              pr={['0', '5']}
-              py="2"
+              rounded="8"
+              overflow="hidden"
+              borderWidth="1"
+              borderColor="coolGray.300"
+              maxW="96"
+              shadow="3"
+              bg="coolGray.100"
+              p="5"
+              mb={4}
             >
-              <HStack space={[2, 3]} justifyContent="space-between">
-                <Avatar
-                  size="48px"
-                  source={{
-                    uri: studySet.creator.userAvatar
-                  }}
-                />
-                <VStack>
-                  <Text
-                    _dark={{
-                      color: 'warmGray.50'
-                    }}
-                    color="coolGray.800"
-                    bold
-                  >
-                    {studySet.studySetName}
-                  </Text>
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: 'warmGray.200'
-                    }}
-                  >
-                    {studySet.creator.userFullName}
-                  </Text>
-                </VStack>
+              <HStack
+                style={{
+                  alignItems: 'center',
+                  width: '80%',
+                  marginBottom: '10%'
+                }}
+                h={100}
+              >
                 <Spacer />
-                <Text
-                  fontSize="xs"
-                  _dark={{
-                    color: 'warmGray.50'
+                <Image
+                  w="300%"
+                  h="150%"
+                  style={{ resizeMode: 'contain', marginTop: '20%' }}
+                  source={{
+                    uri: item.creator.userAvatar
                   }}
-                  color="coolGray.800"
-                  alignSelf="flex-start"
-                >
-                  {studySet.createdAt}
-                </Text>
+                  alt="bg"
+                />
               </HStack>
-            </Box>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(studySet) => studySet.id}
-      />
-    </Box>
+              <Text
+                color="coolGray.800"
+                mt="3"
+                fontWeight="medium"
+                fontSize="xl"
+              >
+                {item.title}
+              </Text>
+              <Text mt="2" fontSize="sm" color="coolGray.700">
+                {item.description}
+              </Text>
+              <Flex
+                style={{
+                  position: 'absolute',
+                  bottom: '0%',
+                  height: '40%',
+                  width: '100%',
+                  backgroundColor: 'rgba(232, 232, 232, 5)'
+                }}
+              >
+                <Flex style={{ flexDirection: 'column', padding: '2%' }}>
+                  <Text fontSize={16} fontWeight="medium" color="black">
+                    {item.studySetName}
+                  </Text>
+                  <Text fontSize={12} fontWeight="medium" color="black">
+                    {new Date(item.createdAt).toLocaleString()}
+                  </Text>
+                </Flex>
+              </Flex>
+            </Pressable>
+          ))}
+        </Box>
+      )}
+    </ScrollView>
   )
 }
 

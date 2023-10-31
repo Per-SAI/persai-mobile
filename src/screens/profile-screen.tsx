@@ -18,7 +18,7 @@ import {
   PUT_CURRENT_LOGGED_USER_URL,
   PUT_REFERRAL_CODE_URL
 } from '../constants/urls'
-import { Button, Center, Modal } from 'native-base'
+import { Button, Center, Flex, Modal } from 'native-base'
 import * as Linking from 'expo-linking'
 import axios from '../constants/axios'
 import { isAxiosError } from 'axios'
@@ -140,23 +140,17 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.headerInfo}>
           <View style={styles.headerInfo_Text}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
+            <Text style={styles.welcomeText}>Welcome back</Text>
+            <Flex flexDirection="row" mt={4}>
               <Text>{displayedName},</Text>
               <Button
+                mt={-3}
                 variant="link"
                 onPress={() => setModalVisible((prev) => !prev)}
               >
                 Edit
               </Button>
-            </View>
-            <Text style={styles.welcomeText}>Welcome back</Text>
+            </Flex>
           </View>
           <Image
             style={styles.avt}
@@ -242,7 +236,6 @@ const ProfileScreen = () => {
                 {userData.referralCode.referralCode}
               </Text>
             </Pressable>
-            <Text style={styles.titleBox}>Invitation code</Text>
             <View
               style={{
                 width: '100%',
@@ -251,13 +244,15 @@ const ProfileScreen = () => {
                 justifyContent: 'space-between'
               }}
             >
+              <Flex flexDirection='row' justifyContent='space-between'>
               <TextInput
                 style={styles.input}
                 onChangeText={setInvitationCode}
                 value={invitationCode}
                 placeholder="Invitation code"
               />
-              <Button onPress={handleSubmitInvitationCode}>Submit</Button>
+              <Button onPress={handleSubmitInvitationCode} w='20%' h='50%' mt={5} bg='rgb(64, 192, 87)' borderRadius={10}>Submit</Button>
+              </Flex>
             </View>
           </View>
         </View>
@@ -336,8 +331,6 @@ const styles = StyleSheet.create({
   cardTextBox: { position: 'absolute', padding: 24 },
   detailSection: {
     flex: 3
-    // paddingTop: 10,
-    // paddingBottom: 200
   },
   titleSection: {
     display: 'flex',
@@ -367,7 +360,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     // paddingLeft: 16,
     paddingTop: 24,
-    color: 'black'
+    color: 'black',
+    marginBottom: '4%'
   },
   input: {
     height: 40,
@@ -377,7 +371,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#00AB55',
     fontSize: 20,
-    fontWeight: '500'
+    fontWeight: '500',
+    marginBottom: '5%',
+    marginTop: '5%'
   }
 })
 
