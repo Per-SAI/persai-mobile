@@ -1,13 +1,150 @@
 import { Box, Center, HStack, VStack, useBreakpointValue } from 'native-base'
-import ShuffleIcon from './icons/shuffle-icon'
 import StartIcon from './icons/start-icon'
 import Question from './question'
 import { Options } from './multitple-choice'
 import { Button } from 'native-base'
 import { AlertDialog } from 'native-base'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import DataContext, { DataProvider } from '../context/DataContext'
+import { ActivityIndicator } from 'react-native'
 
-const QuestionBox = () => {
+type Props = {
+  data: {
+    answers: Array<string>
+    correctAnswer: string
+    fullGptAnswer?: null
+    gptGenerated?: boolean
+    id: number
+    note?: string | null
+    question: string
+  }
+}
+
+const data = [
+  {
+    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
+    correctAnswer: 'choice 1',
+    fullGptAnswer: null,
+    gptGenerated: false,
+    id: 114,
+    note: null,
+    question: 'question 1'
+  },
+  {
+    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
+    correctAnswer: 'choice 1',
+    fullGptAnswer: null,
+    gptGenerated: false,
+    id: 115,
+    note: null,
+    question: 'question 2'
+  },
+  {
+    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
+    correctAnswer: 'choice 1',
+    fullGptAnswer: null,
+    gptGenerated: false,
+    id: 116,
+    note: null,
+    question: 'question 3'
+  },
+  {
+    answers: ['choice 1', 'choice 2', 'choice 3', 'choice 4'],
+    correctAnswer: 'choice 1',
+    fullGptAnswer: null,
+    gptGenerated: false,
+    id: 117,
+    note: null,
+    question: 'question 4'
+  }
+]
+
+const SingleBox = ({ data }: Props) => {
+  const { question, answers, id } = data
+  const [pressed, setPressed] = useState<number | null>(null)
+  const { session, mode } = useContext(DataContext)
+
+  const setBackground = (id: number, ans: string) => {
+    if (session) {
+      for (let i = 0; i < session.length; i++) {
+        const element = session[i]
+        if (element.id === id) {
+          const { selectedAnswer, correctAnswer } = element
+          if (ans === correctAnswer) {
+            return 'green.300'
+          }
+          if (ans === selectedAnswer) {
+            return 'red.300'
+          } else {
+            return 'gray.100'
+          }
+        }
+      }
+    }
+  }
+
+  if (mode === 'RESULT') {
+    return (
+      <Box alignItems="center">
+        <Question question={question} />
+        <HStack
+          space="2"
+          flex={1}
+          pl={5}
+          justifyContent={'flex-start'}
+          maxH="500"
+          flexWrap="wrap"
+        >
+          {/* {components} */}
+          {answers.map((ans, index) => (
+            <Options
+              answer={ans}
+              key={index}
+              id={id}
+              no={index}
+              background={setBackground(id, ans)}
+              setPressed={null}
+            />
+          ))}
+        </HStack>
+      </Box>
+    )
+  }
+
+  return (
+    <Box alignItems="center">
+      <Question question={question} />
+      <HStack
+        space="2"
+        flex={1}
+        pl={5}
+        justifyContent={'flex-start'}
+        maxH="500"
+        flexWrap="wrap"
+      >
+        {/* {components} */}
+        {answers.map((ans, index) => (
+          <Options
+            answer={ans}
+            key={index}
+            id={id}
+            no={index}
+            background={pressed === index ? 'blue.300' : 'gray.100'}
+            setPressed={setPressed}
+          />
+        ))}
+      </HStack>
+      {/* <HStack space="1" flex={1} py={2}>
+        <Options answer="hi" key="1" no="3" background="gray.100" />
+        <Options answer="hi" key="2" no="4" background="gray.100" />
+      </HStack> */}
+    </Box>
+  )
+}
+
+const QuestionBox = (props: Props) => {
+  const { data } = props
+
   const width = useBreakpointValue({
     lg: 'full'
   })
@@ -22,31 +159,13 @@ const QuestionBox = () => {
       p={4}
       mb={4}
       space={6}
+      w={width}
     >
       <HStack space={4}>
-        <ShuffleIcon color="black" />
+        {/* <ShuffleIcon color="black" /> */}
         <StartIcon color="black" />
       </HStack>
-      <Box alignItems="center">
-        <Question question="What is the funniest false thing you were able to convince others that's true?" />
-        {/* Why this Box make things worse? */}
-        {/* <Box flex={1}> */}
-        <HStack space="1" flex={1} py={2} width={width} maxW={'20'} justifyContent={'center'}>
-          {/* {components} */}
-          <Options
-            answer="What is the funniest false thing you were able to convince others that's true"
-            key="1"
-            no="1"
-            background='gray.100'
-          />
-          <Options answer="hi" key="2" no="2" background='gray.100' />
-        </HStack>
-        <HStack space="1" flex={1} py={2} width={width}>
-          <Options answer="hi" key="1" no="3" background='gray.100' />
-          <Options answer="hi" key="2" no="4" background='gray.100' />
-        </HStack>
-        </Box>
-      {/* </Box> */}
+      <SingleBox data={data} />
     </VStack>
   )
 }
@@ -60,68 +179,105 @@ const useFlexDirection = (components: Array<React.ReactNode>) => {
   return flexDir
 }
 
-const MultipleTestQuestionBox = () => {
+const Layout = () => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const { setStudySet, handleOnSubmit, mode, resetSession } =
+    useContext(DataContext)
 
   const onClose = () => setIsOpen(false)
 
   const cancelRef = React.useRef(null)
 
-  // const components = [
-  //   <Options
-  //     answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed elementum interdum nisi eu scelerisque. Aliquam vitae lobortis enim. Proin neque massa,"
-  //     key="1"
-  //   />,
-  //   <Options answer="hi" key="2" />,
-  //   <Options answer="hi" key="3" />,
-  //   <Options answer="hi" key="4" />
-  // ]
+  useEffect(() => {
+    if (setStudySet) {
+      setStudySet(data)
+    }
+  }, [data])
 
-  // const flexDir = useFlexDirection(components)
+  const handleOnPressSubmit = () => {
+    if (handleOnSubmit) {
+      onClose()
+      handleOnSubmit()
+    }
+  }
 
+  const handleOnPressTryAgain = () => {
+    if (resetSession) {
+      resetSession()
+    }
+  }
+
+  if (mode === 'SESSION')
+    return (
+      <>
+        <Box safeAreaBottom={9} m={4}>
+          {data.map((item) => (
+            <QuestionBox data={item} key={item.id} />
+          ))}
+          <Button
+            colorScheme="green"
+            shadow={2}
+            onPress={() => setIsOpen(!isOpen)}
+            color="white"
+            fontWeight="bold"
+            fontSize="md"
+          >
+            Submit
+          </Button>
+          <AlertDialog
+            leastDestructiveRef={cancelRef}
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <AlertDialog.Content>
+              <AlertDialog.CloseButton />
+              <AlertDialog.Header>Submit</AlertDialog.Header>
+              <AlertDialog.Body>Do you want to submit?</AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button.Group space={2}>
+                  <Button
+                    variant="unstyled"
+                    colorScheme="coolGray"
+                    onPress={onClose}
+                    ref={cancelRef}
+                  >
+                    Cancel
+                  </Button>
+                  <Button colorScheme="green" onPress={handleOnPressSubmit}>
+                    Submit
+                  </Button>
+                </Button.Group>
+              </AlertDialog.Footer>
+            </AlertDialog.Content>
+          </AlertDialog>
+        </Box>
+      </>
+    )
+  else if (mode === 'RESULT')
+    return (
+      <Box safeAreaBottom={9} m={4}>
+        {data.map((item) => (
+          <QuestionBox data={item} key={item.id} />
+        ))}
+        <Button colorScheme="green" onPress={handleOnPressTryAgain}>
+          Try Again
+        </Button>
+      </Box>
+    )
+  else {
+    return (
+      <Center flex={1} justifyContent="center" alignItems="center">
+        <ActivityIndicator size="large" color="#00ff00" />
+      </Center>
+    )
+  }
+}
+
+const MultipleTestQuestionBox = () => {
   return (
-    <Box safeAreaBottom={9} m={4}>
-      <QuestionBox />
-      <QuestionBox />
-      <QuestionBox />
-      <QuestionBox />
-      <Button
-        colorScheme="green"
-        shadow={2}
-        onPress={() => setIsOpen(!isOpen)}
-        color="white"
-        fontWeight="bold"
-        fontSize="md"
-      >
-        Submit
-      </Button>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>Submit</AlertDialog.Header>
-          <AlertDialog.Body>Do you want to submit?</AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="unstyled"
-                colorScheme="coolGray"
-                onPress={onClose}
-                ref={cancelRef}
-              >
-                Cancel
-              </Button>
-              <Button colorScheme="green" onPress={onClose}>
-                Submit
-              </Button>
-            </Button.Group>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
-    </Box>
+    <DataProvider>
+      <Layout />
+    </DataProvider>
   )
 }
 

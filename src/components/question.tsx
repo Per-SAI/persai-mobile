@@ -2,7 +2,7 @@ import { Center, Image, Text } from 'native-base'
 
 type Props = {
   question: string
-  options: Array<string>
+  options?: Array<string>
   image?: string
   alt?: string
 }
@@ -14,7 +14,7 @@ const Question = (props: Props) => {
       <Text color="#212B36" fontSize="16" fontWeight="semibold">
         {question}
       </Text>
-      {options.map((ops, index) => (
+      {options?.map((ops, index) => (
         <Text color="#212B36" fontSize="16" fontWeight="semibold" key={index}>
           {ops}
         </Text>

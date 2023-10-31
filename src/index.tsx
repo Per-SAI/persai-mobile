@@ -149,3 +149,8 @@ export type CreateStudySetNavigationProp = BottomTabScreenProps<
   RootStackParamList,
   'CreateStudySet'
 >
+
+export type MultipleChoiceNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'MultipleChoice'
+>

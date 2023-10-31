@@ -13,7 +13,7 @@ const ProgressNav = (props: Props) => {
     props
 
   return (
-    <SafeAreaView>
+    // <SafeAreaView>
       <Flex direction="row" justify="flex-end" w="5/6" align="center">
         <Menu
           trigger={(triggerProps) => {
@@ -36,7 +36,7 @@ const ProgressNav = (props: Props) => {
           )}
         </Menu>
       </Flex>
-    </SafeAreaView>
+    // </SafeAreaView>
   )
 }
 

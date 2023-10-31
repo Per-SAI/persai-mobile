@@ -1,14 +1,6 @@
 import ProgressNav from '../components/progress-nav'
 import Card from '../components/flashcard-question-box'
-import {
-  VStack,
-  Center,
-  HStack,
-  Button,
-  View,
-  Text,
-  Modal,
-} from 'native-base'
+import { VStack, Center, HStack, Button, View, Text, Modal } from 'native-base'
 import ProgressBar from '../components/progress-bar'
 import LearnOptions from '../components/learn-options'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -25,6 +17,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import NumericInput from 'react-native-numeric-input'
 
 import { Alert } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type QuestionResponses = {
   id: number
@@ -172,12 +165,15 @@ const FlashcardScreen = ({
   return (
     <>
       <VStack alignItems="center" space={3} h="full" flex={1}>
-        <ProgressNav
-          handleOnStopSession={handleOnStopSession}
-          handleOnStartedSession={handleOnStartedSession}
-          openPomodoro={handlePresentModalPress}
-          started={started}
-        />
+        <SafeAreaView>
+          <ProgressNav
+            handleOnStopSession={handleOnStopSession}
+            handleOnStartedSession={handleOnStartedSession}
+            openPomodoro={handlePresentModalPress}
+            started={started}
+          />
+        </SafeAreaView>
+
         <HStack top="50%" mx={3}>
           <Button onPress={onPrevious}>{'<'}</Button>
           <Center flex={1} justifyContent="center" alignItems="center">
@@ -211,6 +207,9 @@ const FlashcardScreen = ({
           )}
         </VStack>
       </VStack>
+
+      {/* Pomodoro */}
+
       <BottomSheetModalProvider>
         <View>
           <BottomSheetModal
@@ -286,7 +285,6 @@ const FlashcardScreen = ({
                 rounded={true}
                 minValue={0}
                 value={time}
-
               />
             </Center>
           </Modal.Body>
