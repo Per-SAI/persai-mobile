@@ -130,7 +130,7 @@ const ProfileScreen = () => {
 
   if (isLoading || userData === null)
     return (
-      <Center flex={1} justifyContent='center' alignItems='center'>
+      <Center flex={1} justifyContent="center" alignItems="center">
         <ActivityIndicator size="large" color="#00ff00" />
       </Center>
     )
@@ -140,13 +140,22 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.headerInfo}>
           <View style={styles.headerInfo_Text}>
-            <Text>{displayedName},</Text>
-            <Button
-              variant="link"
-              onPress={() => setModalVisible((prev) => !prev)}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
             >
-              Edit
-            </Button>
+              <Text>{displayedName},</Text>
+              <Button
+                variant="link"
+                onPress={() => setModalVisible((prev) => !prev)}
+              >
+                Edit
+              </Button>
+            </View>
             <Text style={styles.welcomeText}>Welcome back</Text>
           </View>
           <Image
@@ -234,14 +243,22 @@ const ProfileScreen = () => {
               </Text>
             </Pressable>
             <Text style={styles.titleBox}>Invitation code</Text>
-
-            <TextInput
-              style={styles.input}
-              onChangeText={setInvitationCode}
-              value={invitationCode}
-              placeholder="Invitation code"
-            />
-            <Button onPress={handleSubmitInvitationCode}>Submit</Button>
+            <View
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}
+            >
+              <TextInput
+                style={styles.input}
+                onChangeText={setInvitationCode}
+                value={invitationCode}
+                placeholder="Invitation code"
+              />
+              <Button onPress={handleSubmitInvitationCode}>Submit</Button>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -297,6 +314,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24
   },
   avt: {
+    marginTop: 18,
     objectFit: 'cover',
     width: 68,
     height: 68,
@@ -354,7 +372,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     textAlign: 'left',
-    width: '100%',
+    width: '78%',
     // margin: 12,
     borderBottomWidth: 1,
     borderColor: '#00AB55',
