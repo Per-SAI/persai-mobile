@@ -10,3 +10,4 @@ export const GET_ALL_STUDY_SET_URL = `${API_VER}/study-set`
 export const GET_CURRENT_LOGGED_USER_URL = `${API_VER}/user/current`
 export const PUT_CURRENT_LOGGED_USER_URL = `${API_VER}/user/current`
 export const PUT_REFERRAL_CODE_URL = `${API_VER}/referral`
+export const POST_CREATE_NEW_STUDY_SET_URL = `${API_VER}/study-set`

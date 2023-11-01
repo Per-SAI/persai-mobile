@@ -22,7 +22,7 @@ type AuthProps = {
     idToken: string | null
     authenticated: boolean | null
     accessToken: string | null
-    refreshToken: string | null,
+    refreshToken: string | null
     role: string | null
   }
   onLogout?: () => Promise<any>
@@ -32,7 +32,7 @@ type AuthProps = {
       idToken: string | null
       authenticated: boolean | null
       accessToken: string | null
-      refreshToken: string | null,
+      refreshToken: string | null
       role: string | null
     }>
   >
@@ -117,6 +117,10 @@ export const AuthProvider = ({ children }: Props) => {
       if (idToken) {
         const data = await getTokens(idToken)
         await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
+        await AsyncStorage.setItem(
+          '@subscription',
+          JSON.stringify(data.userResponse.subscription)
+        )
         const accessToken = data.accessToken
         await AsyncStorage.setItem('accessToken', accessToken)
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`

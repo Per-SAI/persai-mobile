@@ -62,8 +62,6 @@ const ProfileScreen = () => {
   useEffect(() => {
     const boostrap = async () => {
       if (authState) {
-        const { accessToken } = authState
-        console.log(accessToken)
         const res = await axios.get(GET_CURRENT_LOGGED_USER_URL)
         if (res.data) {
           setUserData(res.data)
@@ -244,14 +242,23 @@ const ProfileScreen = () => {
                 justifyContent: 'space-between'
               }}
             >
-              <Flex flexDirection='row' justifyContent='space-between'>
-              <TextInput
-                style={styles.input}
-                onChangeText={setInvitationCode}
-                value={invitationCode}
-                placeholder="Invitation code"
-              />
-              <Button onPress={handleSubmitInvitationCode} w='20%' h='50%' mt={5} bg='rgb(64, 192, 87)' borderRadius={10}>Submit</Button>
+              <Flex flexDirection="row" justifyContent="space-between">
+                <TextInput
+                  style={styles.input}
+                  onChangeText={setInvitationCode}
+                  value={invitationCode}
+                  placeholder="Invitation code"
+                />
+                <Button
+                  onPress={handleSubmitInvitationCode}
+                  w="20%"
+                  h="50%"
+                  mt={5}
+                  bg="rgb(64, 192, 87)"
+                  borderRadius={10}
+                >
+                  Submit
+                </Button>
               </Flex>
             </View>
           </View>

@@ -45,11 +45,13 @@ const Layout = () => {
   const { authState, onLogout } = useAuth()
 
   if (authState?.authenticated && authState?.role === 'ADMIN') {
-    return <Tab.Navigator screenOptions={options}>
-      <Tab.Screen name="AdminUser" component={AdminUser}  />
-      <Tab.Screen name="AdminSubscription" component={AdminSubscription}  />
-      <Tab.Screen name="AdminTools" component={AdminTools}  />
-    </Tab.Navigator>
+    return (
+      <Tab.Navigator screenOptions={options}>
+        <Tab.Screen name="AdminUser" component={AdminUser} />
+        <Tab.Screen name="AdminSubscription" component={AdminSubscription} />
+        <Tab.Screen name="AdminTools" component={AdminTools} />
+      </Tab.Navigator>
+    )
   }
 
   return (
@@ -79,7 +81,10 @@ const Layout = () => {
           <Tab.Screen
             name="CreateStudySet"
             component={CreateStudySet}
-            options={{ tabBarItemStyle: { display: 'none' } }}
+            options={{
+              tabBarItemStyle: { display: 'none' },
+              unmountOnBlur: true
+            }}
           />
           <Tab.Screen
             name="MyCollection"
