@@ -5,6 +5,7 @@ const API_VER = '/api/v1'
 export const LOGIN_URL = `${host}/api/v1/login/google`
 export const MY_COLLECTION_URL = `${API_VER}/study-set/current`
 export const GET_STUDY_SET_BY_ID_URL = `${API_VER}/study-set`
+export const GET_ALL_USER_URL = `${API_VER}/user`
 export const GET_NEW_ACCESS_TOKEN_URL = `${API_VER}/new-access-token`
 export const GET_ALL_STUDY_SET_URL = `${API_VER}/study-set`
 export const GET_CURRENT_LOGGED_USER_URL = `${API_VER}/user/current`

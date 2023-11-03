@@ -47,9 +47,34 @@ const Layout = () => {
   if (authState?.authenticated && authState?.role === 'ADMIN') {
     return (
       <Tab.Navigator screenOptions={options}>
-        <Tab.Screen name="AdminUser" component={AdminUser} />
-        <Tab.Screen name="AdminSubscription" component={AdminSubscription} />
-        <Tab.Screen name="AdminTools" component={AdminTools} />
+        <Tab.Screen
+          name="AdminUser"
+          component={AdminUser}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="addusergroup" size={24} color="black" />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="AdminSubscription"
+          component={AdminSubscription}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="sharealt" size={24} color="black" />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="AdminTools"
+          component={AdminTools}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="setting" size={24} color="black" />
+            )
+          }}
+        />
       </Tab.Navigator>
     )
   }
@@ -167,4 +192,12 @@ export type CreateStudySetNavigationProp = BottomTabScreenProps<
 export type MultipleChoiceNavigationProp = BottomTabScreenProps<
   RootStackParamList,
   'MultipleChoice'
+>
+export type AdminUserNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'AdminUser'
+>
+export type AdminSubscriptionNavigationProp = BottomTabScreenProps<
+  RootStackParamList,
+  'AdminSubscription'
 >
